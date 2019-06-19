@@ -1,4 +1,4 @@
 # leetcode
 
 
-leetcode first practice
+Leetcode and Lintcode Practice By Python.
