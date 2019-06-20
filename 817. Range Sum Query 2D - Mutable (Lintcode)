@@ -1,0 +1,104 @@
+# Given a 2D matrix, find the sum of the elements inside the rectangle defined by its upper left corner (row1, col1) and lower right corner (row2, col2). And the elements of the matrix could be changed.
+
+# You have to implement three functions:
+
+# NumMatrix(matrix) The constructor.
+# sumRegion(row1, col1, row2, col2) Return the sum of the elements inside the rectangle defined by its upper left corner (row1, col1) and lower right corner (row2, col2).
+# update(row, col, val) Update the element at (row, col) to val.
+# Example
+# Example 1:
+
+# Input:
+#   NumMatrix(
+#     [[3,0,1,4,2],
+#      [5,6,3,2,1],
+#      [1,2,0,1,5],
+#      [4,1,0,1,7],
+#      [1,0,3,0,5]]
+#   )
+#   sumRegion(2,1,4,3)
+#   update(3,2,2)
+#   sumRegion(2,1,4,3)
+# Output:
+#   8
+#   10
+# Example 2:
+
+# Input:
+#   NumMatrix([[1]])
+#   sumRegion(0, 0, 0, 0)
+#   update(0, 0, -1)
+#   sumRegion(0, 0, 0, 0)
+# Output:
+#   1
+#   -1
+
+
+
+class NumMatrix(object):
+
+    def __init__(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        """
+        m, n = len(matrix), len(matrix[0])
+        self.matrix = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
+        self.fenwick = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
+        
+        for i in range(0, m):
+            for j in range(0, n):
+                self.update(i, j, matrix[i][j])
+
+    def update(self, row, col, val):
+        """
+        :type row: int
+        :type col: int
+        :type val: int
+        :rtype: void
+        """
+        row += 1
+        col += 1
+        delta = val - self.matrix[row][col]
+        self.matrix[row][col] = val
+        
+        i, j, numRows, numCols = row, col, len(self.fenwick), len(self.fenwick[0])
+        while i < numRows:
+            j = col
+            while j < numCols:
+                self.fenwick[i][j] += delta
+                j += self.lowbit(j)
+            i += self.lowbit(i)
+            
+    def lowbit(self, k):
+        return k & -k
+        
+        
+    def prefixSum(self, row, col):
+        # private interface, row and col are 1 based
+        i, j, result = row, col, 0
+        while i != 0:
+            j = col 
+            while j != 0:
+                result += self.fenwick[i][j]
+                j -= self.lowbit(j)
+            i -= self.lowbit(i)
+        return result
+
+    def sumRegion(self, row1, col1, row2, col2):
+        """
+        :type row1: int
+        :type col1: int
+        :type row2: int
+        :type col2: int
+        :rtype: int
+        """
+        row2 += 1
+        col2 += 1
+        return self.prefixSum(row2, col2) + self.prefixSum(row1, col1) - self.prefixSum(row1, col2) - self.prefixSum(row2, col1)
+        
+
+
+# Your NumMatrix object will be instantiated and called as such:
+# obj = NumMatrix(matrix)
+# obj.update(row,col,val)
+# param_2 = obj.sumRegion(row1,col1,row2,col2)
