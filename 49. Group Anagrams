@@ -1,0 +1,35 @@
+# Given an array of strings, group anagrams together.
+
+# Example:
+
+# Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
+# Output:
+# [
+#   ["ate","eat","tea"],
+#   ["nat","tan"],
+#   ["bat"]
+# ]
+# Note:
+
+# All inputs will be in lowercase.
+# The order of your output does not matter.
+
+# Use hashMap to record the sorted string and append it into result list.
+
+
+class Solution(object):
+    def groupAnagrams(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: List[List[str]]
+        """
+        
+        d, res = {}, []
+        for i in strs:
+            l = ''.join(sorted(i))
+            d[l] = [i] if l not in d else d[l] + [i]
+        
+        for key in d:
+            res.append(d[key])
+            
+        return res
