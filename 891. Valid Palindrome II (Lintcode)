@@ -1,0 +1,49 @@
+# Given a non-empty string s, you may delete at most one character. Judge whether you can make it a palindrome.
+
+# Example
+# Example 1:
+
+# Input: s = "aba"
+# Output: true
+# Explanation: Originally a palindrome.
+# Example 2:
+
+# Input: s = "abca"
+# Output: true
+# Explanation: Delete 'b' or 'c'.
+# Example 3:
+
+# Input: s = "abc"
+# Output: false
+# Explanation: Deleting any letter can not make it a palindrome.
+# Notice
+# The string will only contain lowercase characters.
+# The maximum length of the string is 50000.
+
+
+# Double Pointer
+
+
+class Solution:
+    """
+    @param s: a string
+    @return bool: whether you can make s a palindrome by deleting at most one character
+    """
+    def validPalindrome(self, s):
+        # Write your code here
+        left, right = 0, len(s) - 1
+        while left < right:
+            if s[left] != s[right]: break
+            left += 1
+            right -= 1
+        
+        if left >= right:   return True
+        return self.isPalindrome(s, left + 1, right) or self.isPalindrome(s, left, right - 1)
+    
+    def isPalindrome(self, s, left, right):
+        while left < right:
+            if s[left] != s[right]: return False
+            left += 1
+            right -= 1
+        return True
+                
