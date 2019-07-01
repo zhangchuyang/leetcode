@@ -1,0 +1,37 @@
+# Given n points on a 2D plane, find if there is such a line parallel to y-axis that reflect the given points.
+
+# Example
+# Example1
+
+# Input: [[1,1],[-1,1]]
+# Output: true
+# Example2
+
+# Input: [[1,1],[-1,-1]]
+# Output: false
+# Challenge
+# Could you do better than O(n2)?
+
+
+# Find the min and max among with the points and check if the line is always correct
+
+
+class Solution:
+    """
+    @param points: n points on a 2D plane
+    @return: if there is such a line parallel to y-axis that reflect the given points
+    """
+    def isReflected(self, points):
+        # Write your code here
+        if not points:  return True
+        
+        s = max(points, key = lambda x: x[0])[0] + min(points, key = lambda x: x[0])[0]
+        m = s / 2.0
+        right = set()
+        reflected = set()
+        
+        for x, y in points:
+            if x > m:   right.add((x, y))
+            elif x < m: reflected.add((s - x, y))
+            
+        return right == reflected
