@@ -1,0 +1,54 @@
+# Given an array nums and a target value k, find the maximum length of a subarray that sums to k. If there isn't one, return 0 instead.
+
+# Example
+# Example1
+
+# Input:  nums = [1, -1, 5, -2, 3], k = 3
+# Output: 4
+# Explanation:
+# because the subarray [1, -1, 5, -2] sums to 3 and is the longest.
+# Example2
+
+# Input: nums = [-2, -1, 2, 1], k = 1
+# Output: 2
+# Explanation:
+# because the subarray [-1, 2] sums to 1 and is the longest.
+# Challenge
+# Can you do it in O(n) time?
+
+# Notice
+# The sum of the entire nums array is guaranteed to fit within the 32-bit signed integer range.
+
+
+
+# 用dictionary存數值的index, 如果遇到重複就存最小的可保證最長subarray
+# Time Complexity: O(N), Space: O(N)
+
+class Solution:
+    """
+    @param nums: an array
+    @param k: a target value
+    @return: the maximum length of a subarray that sums to k
+    """
+    def maxSubArrayLen(self, nums, k):
+        # Write your code here
+
+        if not nums:    return 0
+        prefix = [0 for _ in range(len(nums) + 1)] 
+        res = 0
+        
+        for i in range(len(nums)):
+            prefix[i + 1] = prefix[i] + nums[i]
+        
+
+        d = {}
+        for i in range(len(prefix)):
+            if prefix[i] - k in d:
+                res = max(res, i - d[prefix[i] - k])
+            if prefix[i] not in d:
+                d[prefix[i]] = i
+            else:
+                d[prefix[i]] = min(d[prefix[i]], i)
+
+        
+        return res
