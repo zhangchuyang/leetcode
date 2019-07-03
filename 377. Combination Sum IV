@@ -1,0 +1,42 @@
+class Solution(object):
+    def combinationSum4(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+
+        '''
+        Use DP to solve this more efficiently
+        '''
+    
+        nums.sort()
+        res = [0 for _ in range(target + 1)]
+        res[0] = 1
+        for i in range(target + 1):
+            for num in nums:
+                if num > i: break
+                if num == i:    res[i] += 1
+                if num < i:     res[i] += res[i - num]
+
+        return res[-1]
+    
+        
+        """
+        This Method is correct but TLE because of too many loops
+        """
+#         nums.sort()
+#         res = []
+#         self.dfs(nums, target, res, [])
+#         return len(res)
+    
+    
+#     def dfs(self, nums, target, res, path):
+#         if target == 0: 
+#             res.append(path)
+#             return
+#         for i in range(len(nums)):
+#             if nums[i] > target:  break
+#             self.dfs(nums, target - nums[i], res, path + [nums[i]])
+            
+
