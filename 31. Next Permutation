@@ -1,0 +1,42 @@
+# Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+
+# If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+
+# The replacement must be in-place and use only constant extra memory.
+
+# Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+
+# 1,2,3 → 1,3,2
+# 3,2,1 → 1,2,3
+# 1,1,5 → 1,5,1
+
+class Solution(object):
+    def nextPermutation(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: None Do not return anything, modify nums in-place instead.
+        
+        从后向前 找到第一个decrease的值 然后往后找到比这个值大的最小值， swap， 然后reverse后面的list
+        """
+        
+        index, minIndex = -1, 0
+        for i in range(len(nums) - 1, -1, -1):
+            if nums[i] > nums[i - 1]:
+                index = i - 1
+                break
+        if index == -1:
+            left, right = 0, len(nums) - 1
+        else:    
+            number = float('INF')
+            for i in range(index + 1, len(nums)):
+                minIndex = i if nums[i] > nums[index] and nums[i] - nums[index] < number else minIndex
+
+            nums[index], nums[minIndex] = nums[minIndex], nums[index]
+
+        left, right = index + 1, len(nums) - 1
+        while left < right:
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1
+            right -= 1
+            
+        return nums
