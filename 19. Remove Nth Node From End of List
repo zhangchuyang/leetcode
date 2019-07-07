@@ -1,0 +1,68 @@
+# Given a linked list, remove the n-th node from the end of list and return its head.
+
+# Example:
+
+# Given linked list: 1->2->3->4->5, and n = 2.
+
+# After removing the second node from the end, the linked list becomes 1->2->3->5.
+# Note:
+
+# Given n will always be valid.
+
+# Follow up:
+
+# Could you do this in one pass?
+
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def removeNthFromEnd(self, head, n):
+        """
+        :type head: ListNode
+        :type n: int
+        :rtype: ListNode
+        
+        Two Pass Solution
+        """
+#         size = 0
+#         temp = temp1 = head
+        
+#         while temp:
+#             temp = temp.next
+#             size += 1
+#         index = size - n     
+        
+#         if size == n:   return head.next
+        
+#         while index > 1:
+#             temp1 = temp1.next
+#             index -= 1
+        
+#         temp1.next = temp1.next.next
+#         return head
+
+
+        """
+        One Pass Method, But slower than Two Pass. I dont know why
+        
+        """
+
+        first, second = head, head
+        for i in range(n):
+            second = second.next
+            
+        if not second:  return head.next
+            
+        while second.next:
+            first, second = first.next, second.next
+            print(first.val, second.val)
+            
+        first.next = first.next.next
+        
+        return head
+        
