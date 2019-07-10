@@ -1,0 +1,62 @@
+# You have a number of envelopes with widths and heights given as a pair of integers (w, h). One envelope can fit into another if and only if both the width and height of one envelope is greater than the width and height of the other envelope.
+
+# What is the maximum number of envelopes can you Russian doll? (put one inside other)
+
+# Note:
+# Rotation is not allowed.
+
+# Example:
+
+# Input: [[5,4],[6,4],[6,7],[2,3]]
+# Output: 3 
+# Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
+
+
+class Solution(object):
+    def maxEnvelopes(self, envelopes):
+        """
+        :type envelopes: List[List[int]]
+        :rtype: int
+        
+        Works By DP, but too slow!!
+        """
+#         if not envelopes:   return 0
+#         if len(envelopes) == 1: return 1
+#         dp = [1 for _ in range(len(envelopes))]
+#         ans = 0
+        
+#         envelopes.sort(key = lambda x: x[0])
+        
+#         for i in range(1, len(envelopes)):
+#             w, h = envelopes[i][0], envelopes[i][1]
+#             for j in range(i):
+#                 if w == envelopes[j][0] or h == envelopes[j][1]:    continue
+#                 elif w > envelopes[j][0] and h > envelopes[j][1]:
+#                     dp[i] = max(dp[i], dp[j] + 1)
+#             ans = max(ans, dp[i])
+#         return ans
+
+        if not envelopes:   return 0
+        envelopes.sort(cmp = lambda x,y: x[0] - y[0] if x[0] != y[0] else y[1] - x[1])
+        tails = [envelopes[0]]
+        for i in range(1, len(envelopes)):
+            env = envelopes[i]
+            p = self.binarySearch(tails, env)
+            if p == len(tails):
+                tails.append(env)
+            else:   tails[p] = env
+        return len(tails)
+    
+    
+    def binarySearch(self, l, height):
+        left, right = 0, len(l)
+        while left + 1 < right:
+            mid = left + (right - left) // 2
+            if l[mid][1] < height[1]:
+                left = mid
+            else:
+                right = mid
+        if l[left][1] >= height[1]:    return left
+        else:   return right
+        
+    
