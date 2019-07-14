@@ -1,0 +1,83 @@
+# Clone an undirected graph. Each node in the graph contains a label and a list of its neighbors. Nodes are labeled uniquely.
+
+# You need to return a deep copied graph, which has the same structure as the original graph, and any changes to the new graph will not have any effect on the original graph.
+
+# Example
+# Example1
+
+# Input:
+# {1,2,4#2,1,4#4,1,2}
+# Output: 
+# {1,2,4#2,1,4#4,1,2}
+# Explanation:
+# 1------2  
+#  \     |  
+#   \    |  
+#   \   |  
+#     \  |  
+#       4   
+# Clarification
+# How we serialize an undirected graph: http://www.lintcode.com/help/graph/
+
+# Notice
+# You need return the node with the same label as the input node.
+
+"""
+Definition for a undirected graph node
+class UndirectedGraphNode:
+    def __init__(self, x):
+        self.label = x
+        self.neighbors = []
+"""
+
+
+class Solution:
+    """
+    @param: node: A undirected graph node
+    @return: A undirected graph node
+    """
+    def cloneGraph(self, node):
+        # write your code here
+
+        # if not node:    return node
+        # root = UndirectedGraphNode(node.label)
+        # visited = {}
+        # visited[root.label] = root
+        # q = [node]
+        
+        # while q:
+        #     curr = q.pop(0)
+        #     for node in curr.neighbors:
+        #         if node.label not in visited:
+        #             visited[node.label] = UndirectedGraphNode(node.label)
+        #             q.append(node)
+        #         visited[curr.label].neighbors.append(visited[node.label])
+        # return root
+        
+        if not node:    return node
+        root = node
+        mapping = {}
+        nodes = self.getNode(node)
+        
+        for node in nodes:
+            mapping[node] = UndirectedGraphNode(node.label)
+        for node in nodes:
+            new_node = mapping[node]
+            for neighbor in node.neighbors:
+                new_neighbor = mapping[neighbor]
+                new_node.neighbors.append(new_neighbor)
+                
+        return mapping[root]
+        
+        
+    def getNode(self, node):
+        q = [node]
+        res = set([node])
+        while q:
+            head = q.pop(0)
+            for n in head.neighbors:
+                if n not in res:
+                    res.add(n)
+                    q.append(n)
+                    
+        return res
