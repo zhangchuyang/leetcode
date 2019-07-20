@@ -1,0 +1,34 @@
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        
+        '''
+        O(nlogk), O(k)
+        '''
+#         pq = nums[:k]
+#         heapq.heapify(pq)
+        
+#         for x in nums[k:]:
+#             heapq.heappush(pq, x)
+#             heapq.heappop(pq)
+            
+#         return pq[0]
+
+
+        '''
+        Quick Sort
+        
+        '''
+        if not nums:    return 
+        p = random.choice(nums)
+        left, mid, right = [x for x in nums if x > p], [x for x in nums if x == p], [x for x in nums if x < p]
+        nums, mid_start, end_start = left + mid + right, len(left), len(left) + len(mid)
+        if k <= mid_start:  return self.findKthLargest(nums[:mid_start], k)
+        elif k > end_start: return self.findKthLargest(nums[end_start:], k - end_start)
+        else:   return nums[mid_start]
+    
+    
