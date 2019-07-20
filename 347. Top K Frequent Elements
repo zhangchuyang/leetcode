@@ -1,0 +1,31 @@
+# Given a non-empty array of integers, return the k most frequent elements.
+
+# Example 1:
+
+# Input: nums = [1,1,1,2,2,3], k = 2
+# Output: [1,2]
+# Example 2:
+
+# Input: nums = [1], k = 1
+# Output: [1]
+# Note:
+
+# You may assume k is always valid, 1 ≤ k ≤ number of unique elements.
+# Your algorithm's time complexity must be better than O(n log n), where n is the array's size.
+
+class Solution(object):
+    def topKFrequent(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: List[int]
+        """
+        
+        d = collections.Counter(nums)
+        res, mini = [], 0
+        for index in d: res.append((d[index], index))         
+        res.sort(key=lambda x: x[0])
+        res, temp = res[-k:], []
+        for i in res:   temp.append(i[1])
+        temp.reverse()    
+        return temp
