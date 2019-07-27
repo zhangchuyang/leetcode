@@ -1,0 +1,46 @@
+# Given a permutation A of [0, 1, ..., N - 1], where N is the length of A.
+
+# The number of global inversions is the number of i < j with 0 <= i < j < N and A[i] > A[j].
+
+# The number of local inversions is the number of i with 0 <= i < N and A[i] > A[i+1].
+
+# Return true if and only if the number of global inversions is equal to the number of local inversions, otherwise returh false.
+
+# Example
+# Example 1:
+
+# Input: [0, 1, 2]
+# Output: true
+# Explanation: There is 0 global inversion, and 0 local inversion.
+# Example 2:
+
+# Input: [1, 2, 0]
+# Output: false
+# Explanation: There are 2 global inversions, and 1 local inversion.
+# Notice
+# A will be a permutation of [0, 1, ..., A.length - 1].
+# A will have length in range [1, 5000].
+# The time limit for this problem has been reduced.
+
+
+class Solution:
+    """
+    @param A: an array
+    @return: is the number of global inversions is equal to the number of local inversions
+    """
+    def isIdealPermutation(self, A):
+        # Write your code here
+
+        g, l = 0, 0
+        
+        for i in range(len(A)):
+            for j in range(i, len(A)):
+                if A[i] > A[j]:
+                    g += 1
+        
+        
+        for i in range(len(A) - 1):
+            if A[i] > A[i + 1]: l += 1
+            
+            
+        return g == l
