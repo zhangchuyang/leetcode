@@ -1,0 +1,52 @@
+# Given a linked list, delete the nth to mth nodes in the linked list, and return the head node of the linked list.
+
+# Example
+# Example 1:
+
+# Input: head = 1->2->3->4->5->null, n = 1, m = 2
+# Output: 1->4->5->null
+# Example 2:
+
+# Input: head = 1->2->3->4->5->null, n = 1, m = 4
+# Output: 1->null
+# Notice
+# The label starts from 00
+
+# The length of the list does not exceed 100000100000
+
+"""
+Definition of ListNode
+class ListNode(object):
+    def __init__(self, val, next=None):
+        self.val = val
+        self.next = next
+"""
+
+class Solution:
+    """
+    @param head: The first node of linked list
+    @param n: the start index
+    @param m: the end node
+    @return: A ListNode
+    """
+    def deleteNode(self, head, n, m):
+        # Write your code here
+        
+        if not head:    return None
+        count = 0
+        dummy = ListNode(0)
+        dummy.next = head
+        prev, curr = dummy, head
+        
+        while curr:
+            if count < n:
+                curr = curr.next
+                prev = prev.next
+                count += 1
+                continue
+            elif n <= count <= m:
+                curr = curr.next
+                count += 1
+            if count > m:
+                prev.next = curr
+                return dummy.next
