@@ -1,0 +1,34 @@
+# Given a list of daily temperatures, produce a list that, for each day in the input, tells you how many days you would have to wait until a warmer temperature. If there is no future day for which this is possible, put 0 instead.
+
+# For example, given the list temperatures = [73, 74, 75, 71, 69, 72, 76, 73], your output should be [1, 1, 4, 2, 1, 1, 0, 0].
+
+# Example
+# Example 1:
+# 	Input:  temperatures = [73, 74, 75, 71, 69, 72, 76, 73]
+# 	Output:  [1, 1, 4, 2, 1, 1, 0, 0]
+	
+# 	Explanation:
+# 	Just find the first day after it which has higher temperatures than it.
+
+	
+# Example 2:
+# 	Input: temperatures = [50, 40, 39, 30]
+# 	Output:  [0,0,0,0]
+	
+
+
+class Solution:
+    """
+    @param temperatures: a list of daily temperatures
+    @return: a list of how many days you would have to wait until a warmer temperature
+    """
+    def dailyTemperatures(self, temperatures):
+        # Write your code here
+        res, stack = [], []
+        for i in range(len(temperatures) - 1, -1, -1):
+            while stack and temperatures[stack[-1]] <= temperatures[i]:  stack.pop()
+            res.append(stack[-1] - i if stack else 0)
+            stack.append(i)
+            
+        return res[::-1]
+        
