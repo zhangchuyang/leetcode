@@ -1,0 +1,55 @@
+# Given two strings source and target. Return the minimum substring of source which contains each char of target.
+
+# Example
+# Example 1:
+
+# Input: source = "abc", target = "ac"
+# Output: "abc"
+# Example 2:
+
+# Input: source = "adobecodebanc", target = "abc"
+# Output: "banc"
+# Explanation: "banc" is the minimum substring of source string which contains each char of target "abc".
+# Example 3:
+
+# Input: source = "abc", target = "aa"
+# Output: ""
+# Explanation: No substring contains two 'a'.
+# Challenge
+# O(n) time
+
+class Solution:
+    """
+    @param source : A string
+    @param target: A string
+    @return: A string denote the minimum window, return "" if there is no such a string
+    """
+    def minWindow(self, source , target):
+        # write your code here
+        if not source:  return ''
+        d = collections.Counter(target)
+        minLength = float('inf')
+        start = 0
+        left = right = 0
+        
+        def all_in(d):
+            for index, value in d.items():
+                if value > 0:   return False
+            return True
+        
+        for left in range(len(source)):
+            while right < len(source) and not all_in(d):
+                if source[right] in d:
+                    d[source[right]] -= 1
+                right += 1
+            
+            if all_in(d) and right - left < minLength:
+                minLength = right - left
+                start = left
+            
+            if source[left] in d:  d[source[left]] += 1
+            
+        return source[start: start + minLength] if minLength != float('inf') else ''
+        
+        
+            
