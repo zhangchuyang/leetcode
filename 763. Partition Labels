@@ -1,0 +1,21 @@
+class Solution(object):
+    def partitionLabels(self, S):
+        """
+        :type S: str
+        :rtype: List[int]
+        
+        
+        HashMap store the last index of each char. And loop the index if index == the index right now and append to result.
+        """
+        res = []
+        d = {char: i for i, char in enumerate(S)}
+        index = 0
+        start = 0
+        
+        for i in range(len(S)):
+            index = max(d[S[i]], index)
+            if i == index:
+                res.append(i - start + 1)
+                start = i + 1
+        
+        return res
