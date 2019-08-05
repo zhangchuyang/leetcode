@@ -1,0 +1,42 @@
+# You are given a circular array nums of positive and negative integers. If a number k at an index is positive, then move forward k steps. Conversely, if it's negative (-k), move backward k steps. Since the array is circular, you may assume that the last element's next element is the first element, and the first element's previous element is the last element.
+
+# Determine if there is a loop (or a cycle) in nums. A cycle must start and end at the same index and the cycle's length > 1. Furthermore, movements in a cycle must all follow a single direction. In other words, a cycle must not consist of both forward and backward movements.
+
+ 
+
+# Example 1:
+
+# Input: [2,-1,1,2,2]
+# Output: true
+# Explanation: There is a cycle, from index 0 -> 2 -> 3 -> 0. The cycle's length is 3.
+# Example 2:
+
+# Input: [-1,2]
+# Output: false
+# Explanation: The movement from index 1 -> 1 -> 1 ... is not a cycle, because the cycle's length is 1. By definition the cycle's length must be greater than 1.
+# Example 3:
+
+# Input: [-2,1,-1,-2,-2]
+# Output: false
+# Explanation: The movement from index 1 -> 2 -> 1 -> ... is not a cycle, because movement from index 1 -> 2 is a forward movement, but movement from index 2 -> 1 is a backward movement. All movements in a cycle must follow a single direction.
+
+class Solution(object):
+    def circularArrayLoop(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: bool
+        
+        When we start a loop, as the problem description says, every item in the loop should have same sign, and when some loop have length more than len(nums) then it's indeed a circular loop, then we can avoid to have auxiliary storage
+        """
+        for index, num in enumerate(nums):
+            length = 0
+            j = index
+            forward = nums[j] > 0
+            while True:
+                if (forward and nums[j] < 0) or (not forward and nums[j] > 0):  break
+                nextj = (j + nums[j] + len(nums)) % len(nums)
+                if nextj == j:  break
+                j = nextj
+                length += 1
+                if length > len(nums):  return True
+        return False
