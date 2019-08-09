@@ -1,0 +1,91 @@
+# Given a list accounts, each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.
+
+# Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some email that is common to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
+
+# After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails in sorted order. The accounts themselves can be returned in any order.
+
+# Example
+# Example 1:
+# 	Input:
+# 	[
+# 		["John", "johnsmith@mail.com", "john00@mail.com"],
+# 		["John", "johnnybravo@mail.com"],
+# 		["John", "johnsmith@mail.com", "john_newyork@mail.com"],
+# 		["Mary", "mary@mail.com"]
+# 	]
+	
+# 	Output: 
+# 	[
+# 		["John", 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com'],
+# 		["John", "johnnybravo@mail.com"],
+# 		["Mary", "mary@mail.com"]
+# 	]
+
+# 	Explanation: 
+# 	The first and third John's are the same person as they have the common email "johnsmith@mail.com".
+# 	The second John and Mary are different people as none of their email addresses are used by other accounts.
+
+# 	You could return these lists in any order, for example the answer
+	
+# 	[
+# 		['Mary', 'mary@mail.com'],
+# 		['John', 'johnnybravo@mail.com'],
+# 		['John', 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com']
+# 	]
+# 	is also acceptable.
+
+
+class Solution:
+    """
+    @param accounts: List[List[str]]
+    @return: return a List[List[str]]
+    """
+    def accountsMerge(self, accounts):
+        # write your code here
+        if not accounts:    return
+        self.d = {}
+        email_index = {}
+        
+        for i, account in enumerate(accounts):
+            for email in account[1:]:
+                self.d[email] = email
+                email_index[email] = i
+                
+        for account in accounts:
+            root = self.find(account[1])
+            for email in account[1:]:
+                self.union(root, email)
+                
+        res = []
+        
+        account_email = {}
+        for account in accounts:
+            root = self.find(account[1])
+            index = email_index[root]
+            account_email[index] = account_email.get(index, set())
+            for email in account[1:]:
+                account_email[index].add(email)
+                
+        for index, emails in account_email.items():
+            res.append([accounts[index][0]] + sorted(emails))
+        return res
+        
+        
+    def find(self, node):
+        root = node
+        while root != self.d[root]:
+            root = self.d[root]
+        while node != root:
+            temp = self.d[node]
+            self.d[node] = root
+            node = temp
+            
+        return root
+ 
+    def union(self, root, node):
+        root_root = self.find(root)
+        root_node = self.find(node)
+        if root_node != root_root:
+            self.d[root_node] = root_root 
+        
+        
