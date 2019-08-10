@@ -1,0 +1,36 @@
+# Given a string, find all permutations of it without duplicates.
+
+# Example
+# Example 1:
+
+# Input: "abb"
+# Output:
+# ["abb", "bab", "bba"]
+# Example 2:
+
+# Input: "aabb"
+# Output:
+# ["aabb", "abab", "baba", "bbaa", "abba", "baab"]
+
+
+class Solution:
+    """
+    @param str: A string
+    @return: all permutations
+    """
+    def stringPermutation2(self, str):
+        # write your code here
+        if not str: return ['']
+        string = sorted(str)
+        res = []
+        self.dfs(string, [], res)
+        return res
+        
+    def dfs(self, string, path, res):
+        if not string:
+            res.append(''.join(path))
+            return
+        for i in range(len(string)):
+            if i > 0 and string[i] == string[i - 1]:    continue
+            self.dfs(string[:i] + string[i + 1:], path + [string[i]], res)
+            
