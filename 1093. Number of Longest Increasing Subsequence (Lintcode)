@@ -1,0 +1,42 @@
+# Given an unsorted array of integers, find the number of longest increasing subsequence.
+
+# Example
+# Example 1:
+
+# Input: [1,3,5,4,7]
+# Output: 2
+# Explanation: The two longest increasing subsequence are [1, 3, 4, 7] and [1, 3, 5, 7].
+# Example 2:
+
+# Input: [2,2,2,2,2]
+# Output: 5
+# Explanation: The length of longest continuous increasing subsequence is 1, and there are 5 subsequences' length is 1, so output 5.
+
+
+class Solution:
+    """
+    @param nums: an array
+    @return: the number of longest increasing subsequence
+    dp[i][0] 代表以第 i 个数结尾的最长上升子序列的长度。
+    dp[i][1] 代表以第 i 个数结尾的最长上升子序列的个数。
+    dp[i][0] = max(dp[j][0] + 1), nums[j] < nums[i]。
+    dp[i][1] = sum(dp[j][1]), nums[j] < nums[i] and dp[j][0] == dp[i][0] - 1。
+    """
+    def findNumberOfLIS(self, nums):
+        # Write your code here
+        
+        dp = [[1, 1] for _ in range(len(nums))]
+        res = [0, 0]
+        
+        for i in range(len(nums)):
+            for j in range(i):
+                if nums[i] > nums[j]:
+                    if dp[j][0] + 1 > dp[i][0]: dp[i] = [dp[j][0] + 1, dp[j][1]]
+                    elif dp[j][0] + 1 == dp[i][0]:  dp[i] = [dp[i][0], dp[i][1] + dp[j][1]]
+        
+        for i in range(len(dp)):
+            if dp[i][0] > res[0]:
+                res = [dp[i][0], dp[i][1]]
+            elif dp[i][0] == res[0]:
+                res = [dp[i][0], res[1] + dp[i][1]]
+        return res[1]
