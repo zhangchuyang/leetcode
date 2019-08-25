@@ -1,0 +1,68 @@
+# Solve a given equation and return the value of x in the form of string "x=#value". The equation contains only '+', '-' operation, the variable x and its coefficient.
+
+# If there is no solution for the equation, return "No solution".
+# If there are infinite solutions for the equation, return "Infinite solutions".
+# If there is exactly one solution for the equation, we ensure that the value of x is an integer.
+
+# Example
+# Example1
+
+# Input: "x+5-3+x=6+x-2"
+# Output: "x=2"
+# Example2
+
+# Input: "x=x"
+# Output: "Infinite solutions"
+# Example3
+
+# Input: "2x=x"
+# Output: "x=0"
+# Example4
+
+# Input: "2x+3x-6x=x+2"
+# Output: "x=-1"
+# Example5
+
+# Input: "x=x+2"
+# Output: "No solution"
+
+class Solution:
+    """
+    @param equation: a string
+    @return: return a string
+    """
+    def solveEquation(self, equation):
+        # write your code here
+        if not equation:    return 'No solution'
+        e = equation.split('=')
+        left, right = e[0], e[1]
+        
+        left_a, left_b = self.helper(left)
+        right_a, right_b = self.helper(right)
+        
+        
+        if left_b == right_b and left_a == right_a:
+            return 'Infinite solutions'
+        if left_a == right_a and left_b != right_b:
+            return 'No solution'
+        return 'x=' + str((right_b - left_b) // (left_a - right_a))
+        
+        
+    def helper(self, string):
+        a, b = 0, 0
+        sign = 1
+        num = 0
+        for char in string:
+            if char.isdigit():
+                num = num * 10 + int(char)
+            elif char == 'x':
+                if num == 0: a += sign
+                else:
+                    a += sign * num
+                    num = 0
+            else:
+                b += sign * num
+                num = 0
+                sign = 1 if char == '+' else -1
+        b += sign * num
+        return a, b
