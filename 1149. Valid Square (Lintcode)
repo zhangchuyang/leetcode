@@ -1,0 +1,43 @@
+# Given the coordinates of four points in 2D space, return whether the four points could construct a square.
+
+# The coordinate (x,y) of a point is represented by an integer array with two integers.
+
+# Example
+# Example 1
+
+# Input: p1 = [0,0], p2 = [1,1], p3 = [1,0], p4 = [0,1]
+# Output: True
+# Example 2
+
+# Input: p1 = [0,0], p2 = [1,2], p3 = [1,-1], p4 = [0,1]
+# Output: False
+# Notice
+# All the input integers are in the range [-10000, 10000].
+# A valid square has four equal sides with positive length and four equal angles (90-degree angles).
+# Input points have no order.
+
+
+class Solution:
+    """
+    @param p1: the first point
+    @param p2: the second point
+    @param p3: the third point
+    @param p4: the fourth point
+    @return: whether the four points could construct a square
+    """
+    def validSquare(self, p1, p2, p3, p4):
+        # Write your code here
+        a1, a2, a3, a4, a5, a6 = self.length(p1, p2), self.length(p2, p3), self.length(p1, p3), self.length(p1, p4), self.length(p2, p4), self.length(p3, p4)
+        
+        arr = [a1, a2, a3, a4, a5, a6]
+        
+        arr.sort()
+        print(arr)
+        if arr[0] == arr[1] == arr[2] == arr[3] and arr[4] == arr[5] and arr[0] > 0 and arr[4] > 0:
+            return True
+        return False
+        
+
+
+    def length(self, a, b):
+        return abs(a[0] - b[0]) + abs(a[1] - b[1])
