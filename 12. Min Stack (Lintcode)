@@ -1,0 +1,75 @@
+# Implement a stack with following functions:
+
+# push(val) push val into the stack
+# pop() pop the top element and return it
+# min() return the smallest number in the stack
+# All above should be in O(1) cost.
+
+# Example
+# Example 1:
+
+# Input:
+#   push(1)
+#   pop()
+#   push(2)
+#   push(3)
+#   min()
+#   push(1)
+#   min()
+# Output:
+#   1
+#   2
+#   1
+# Example 2:
+
+# Input:
+#   push(1)
+#   min()
+#   push(2)
+#   min()
+#   push(3)
+#   min()
+# Output:
+#   1
+#   1
+#   1
+# Notice
+# min() will never be called when there is no number in the stack.
+
+
+
+
+class MinStack:
+    
+    def __init__(self):
+        # do intialization if necessary
+        self.arr = []
+        self.min_stack = []
+
+    """
+    @param: number: An integer
+    @return: nothing
+    """
+    def push(self, number):
+        # write your code here
+        self.arr.append(number)
+        if not self.min_stack:
+            self.min_stack.append(number)
+        else:
+            self.min_stack.append(min(number, self.min_stack[-1]))
+    """
+    @return: An integer
+    """
+    def pop(self):
+        # write your code here
+        value = self.arr[-1]
+        del self.arr[-1]
+        del self.min_stack[-1]
+        return value
+        
+    """
+    @return: An integer
+    """
+    def min(self):
+        # write your code here
+        return self.min_stack[-1]
