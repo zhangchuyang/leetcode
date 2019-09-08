@@ -1,0 +1,37 @@
+# Given two strings representing two [complex numbers].
+
+# You need to return a string representing their multiplication. Note i^2 = -1 according to the definition.
+
+# Example
+# Example 1:
+
+# Input: "1+1i", "1+1i"
+# Output: "0+2i"
+# Explanation: (1 + i) * (1 + i) = 1 + i^2 + 2 * i = 2i, and you need convert it to the form of 0+2i.
+# Example 2:
+
+# Input: "1+-1i", "1+-1i"
+# Output: "0+-2i"
+# Explanation: (1 - i) * (1 - i) = 1 + i^2 - 2 * i = -2i, and you need convert it to the form of 0+-2i.
+# Notice
+# 1.The input strings will not have extra blank.
+# 2.The input strings will be given in the form of a+bi, where the integer a and b will both belong to the range of [-100, 100]. And the output should be also in this form.
+
+
+class Solution:
+    """
+    @param a: a string
+    @param b: a string
+    @return: a string representing their multiplication
+    """
+    def complexNumberMultiply(self, a, b):
+        # Write your code here
+
+        new_a, new_b = a.split('+'), b.split('+')
+        
+        a_a, a_b = int(new_a[0]), int(new_a[1][:-1])
+        b_a, b_b = int(new_b[0]), int(new_b[1][:-1])
+        
+        
+        return str(a_a * b_a - a_b * b_b) + '+' + str(a_a * b_b + a_b * b_a) + 'i' 
+        
