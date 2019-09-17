@@ -1,0 +1,94 @@
+# Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+# For example,
+# [2,3,4], the median is 3
+
+# [2,3], the median is (2 + 3) / 2 = 2.5
+
+# Design a data structure that supports the following two operations:
+
+# void addNum(int num) - Add a integer number from the data stream to the data structure.
+# double findMedian() - Return the median of all elements so far.
+ 
+
+# Example:
+
+# addNum(1)
+# addNum(2)
+# findMedian() -> 1.5
+# addNum(3) 
+# findMedian() -> 2
+ 
+
+# Follow up:
+
+# If all integer numbers from the stream are between 0 and 100, how would you optimize it?
+
+Make a list from 0 to 100 so that when the number comes, we count the ocurrance of each number and then do the median
+
+# If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it?
+
+list with hashmap
+
+
+import heapq
+class MedianFinder(object):
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.upper = []
+        self.lower = []
+        
+
+    def addNum(self, num):
+        """
+        :type num: int
+        :rtype: None
+        """
+        if len(self.upper) == len(self.lower):
+            if num >= self.findMedian():
+                heapq.heappush(self.upper, num)
+            else:
+                heapq.heappush(self.lower, -num)
+        elif len(self.upper) < len(self.lower):
+            if num >= self.findMedian():
+                heapq.heappush(self.upper, num)
+            else:
+                heapq.heappush(self.upper, -heapq.heappop(self.lower))
+                heapq.heappush(self.lower, -num)
+        else:
+            if num < self.findMedian():
+                heapq.heappush(self.lower, -num)
+            else:
+                heapq.heappush(self.upper, num)
+                heapq.heappush(self.lower, -heapq.heappop(self.upper))
+                
+            
+            
+    def findMedian(self):
+        """
+        :rtype: float
+        """
+        
+        if not self.upper and not self.lower:   return 0.0
+
+        if self.upper and self.lower:
+            if len(self.upper) == len(self.lower):
+                return (self.upper[0] - self.lower[0]) / 2.0
+            elif len(self.upper) > len(self.lower):
+                return self.upper[0]
+            else:   return -self.lower[0]
+        
+        if self.upper:
+            return self.upper[0]
+        else:   return -self.lower[0]
+        
+      
+    
+    
+# Your MedianFinder object will be instantiated and called as such:
+# obj = MedianFinder()
+# obj.addNum(num)
+# param_2 = obj.findMedian()
