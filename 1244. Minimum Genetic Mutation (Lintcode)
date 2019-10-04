@@ -1,0 +1,81 @@
+# A gene string can be represented by an 8-character long string, with choices from "A", "C", "G", "T".
+
+# Suppose we need to investigate about a mutation (mutation from "start" to "end"), where ONE mutation is defined as ONE single character changed in the gene string.
+
+# For example, "AACCGGTT" -> "AACCGGTA" is 1 mutation.
+
+# Also, there is a given gene "bank", which records all the valid gene mutations. A gene must be in the bank to make it a valid gene string.
+
+# Now, given 3 things - start, end, bank, your task is to determine what is the minimum number of mutations needed to mutate from "start" to "end". If there is no such a mutation, return -1.
+
+# Example
+# Example 1:
+
+# Input:
+# "AACCGGTT"
+# "AACCGGTA"
+# ["AACCGGTA"]
+# Output: 1
+# Explanation:
+# start: "AACCGGTT"
+# end:  "AACCGGTA"
+# bank: ["AACCGGTA"]
+# Example 2:
+
+# Input:
+# "AACCGGTT"
+# "AAACGGTA"
+# ["AACCGGTA", "AACCGCTA", "AAACGGTA"]
+# Output: 2
+# Example 3:
+
+# Input:
+# "AAAAACCC"
+# "AACCCCCC"
+# ["AAAACCCC", "AAACCCCC", "AACCCCCC"]
+# Output: 3
+# Notice
+# Starting point is assumed to be valid, so it might not be included in the bank.
+# If multiple mutations are needed, all mutations during in the sequence must be valid.
+# You may assume start and end string is not the same.
+
+
+import collections
+
+class Solution:
+    """
+    @param start: 
+    @param end: 
+    @param bank: 
+    @return: the minimum number of mutations needed to mutate from "start" to "end"
+    """
+    def minMutation(self, start, end, bank):
+        # Write your code here
+        if end not in bank: return -1
+        if not bank:    return -1
+        bank = set(bank)
+        queue = collections.deque([start])
+        dist = {}
+        dist[start] = 0
+        
+        while queue:
+            string = queue.popleft()
+            for x in self.helper(string, bank):
+                if x == end:
+                    return dist[string] + 1
+                if x not in dist:
+                    dist[x] = dist[string] + 1
+                    queue.append(x)
+        return -1
+        
+        
+    def helper(self, string, bank):
+        char = 'ACGT'
+        res = []
+        
+        for i in range(len(string)):
+            for c in char:
+                new_string = string[:i] + c + string[i + 1:]
+                if new_string not in bank:  continue
+                res.append(new_string)
+        return res
