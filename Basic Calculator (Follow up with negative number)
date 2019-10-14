@@ -1,0 +1,132 @@
+class Solution:
+    """
+    @param s: the expression string
+    @return: the answer
+    """
+    def calculate(self, s):
+        # Write your code here
+
+        order = {'+': 0, '-': 0, '*': 1, '/': 1}
+        stack = []
+        num = 0
+        sign = 1
+        
+        prev = ' '
+        for char in s:
+            if char.isdigit():
+                num = num * 10 + int(char)
+            
+            if char in '+-*/':
+                if prev in '+-*/(':
+                    sign = -1 if char == '-' else 1
+                    continue
+
+                while stack and stack[-1] != '(' and order[stack[-1]] >= order[char]:
+                    operator = stack.pop()
+                    pre = stack.pop()
+                    num = self.helper(operator, pre, sign * num)
+                    sign = 1
+                    
+                stack.append(sign * num)
+                stack.append(char)
+                num = 0
+                
+            if char == '(':
+                stack.append(char)
+                
+            if char == ')':
+                while stack[-1] != '(':
+                    operator = stack.pop()
+                    pre = stack.pop()
+                    num = self.helper(operator, pre, sign * num)
+                    sign = 1
+
+                stack.pop()
+                
+            if char != ' ': prev = char
+                
+        while stack:
+            operator = stack.pop()
+            pre = stack.pop()
+            
+            num = self.helper(operator, pre, sign * num)
+            sign = 1
+            
+        return num
+        
+        
+    def helper(self, operator, num1, num2):
+        if operator == '+': return num1 + num2
+        if operator == '/': return num1 // num2
+        if operator == '-': return num1 - num2
+        else:   return num1 * num2
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    #     order = {'+': 0, '-': 0, '*': 1, '/': 1}
+    #     stack = []
+    #     num = 0
+        
+        
+    #     for char in s:
+    #         if char.isdigit():
+    #             num = num * 10 + int(char)
+            
+    #         if char in '+-*/':
+    #             while stack and stack[-1] != '(' and order[stack[-1]] >= order[char]:
+    #                 operator = stack.pop()
+    #                 pre = stack.pop()
+    #                 num = self.helper(operator, pre, num)
+                    
+    #             stack.append(num)
+    #             stack.append(char)
+    #             num = 0
+                
+    #         if char == '(':
+    #             stack.append(char)
+                
+    #         if char == ')':
+    #             while stack[-1] != '(':
+    #                 operator = stack.pop()
+    #                 pre = stack.pop()
+    #                 num = self.helper(operator, pre, num)
+                    
+    #             stack.pop()
+                
+                
+    #     while stack:
+    #         operator = stack.pop()
+    #         pre = stack.pop()
+            
+    #         num = self.helper(operator, pre, num)
+            
+            
+    #     return num
+        
+        
+    # def helper(self, operator, num1, num2):
+    #     if operator == '+': return num1 + num2
+    #     if operator == '/': return num1 // num2
+    #     if operator == '-': return num1 - num2
+    #     else:   return num1 * num2
+        
+    
