@@ -1,0 +1,33 @@
+# Given a string S, check if the letters can be rearranged so that two characters that are adjacent to each other are not the same.
+
+# If possible, output any possible result.  If not possible, return the empty string.
+
+# Example 1:
+
+# Input: S = "aab"
+# Output: "aba"
+# Example 2:
+
+# Input: S = "aaab"
+# Output: ""
+
+
+import collections
+
+class Solution:
+    def reorganizeString(self, S: str) -> str:
+        
+        count = collections.Counter(S).most_common()
+        
+        key, value = count[0]
+        if value > (len(S) + 1) // 2:
+            return ''
+
+        parts = ['' for _ in range(value)]
+        begin = 0
+        for key, val in count:
+            for i in range(val):
+                parts[(i + begin) % value] += key
+            begin += val
+
+        return ''.join(part for part in parts)
