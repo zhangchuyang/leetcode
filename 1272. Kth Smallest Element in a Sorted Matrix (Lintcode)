@@ -1,0 +1,60 @@
+# Given a n x n matrix where each of the rows and columns are sorted in ascending order, find the kth smallest element in the matrix.
+
+# Note that it is the kth smallest element in the sorted order, not the kth distinct element.
+
+#  
+# Example1
+
+# Input:
+# [[ 1,  5,  9],[10, 11, 13],[12, 13, 15]]
+# 8
+# Output: 13
+# Example2
+
+# Input:
+# [[-5]]
+# 1
+# Output: -5
+# Challenge
+# If k << n^2, what's the best algorithm?
+# How about k ~ n^2?
+
+# Notice
+# You may assume k is always valid, 1 ≤ k ≤ n^2.
+
+
+class Solution:
+    """
+    @param matrix: List[List[int]]
+    @param k: a integer
+    @return: return a integer
+    """
+    def kthSmallest(self, matrix, k):
+        # write your code here
+        start = matrix[0][0] 
+        end = matrix[-1][-1]
+        
+        while start + 1 < end:
+            mid = start + (end - start) // 2 
+            print(mid)
+            if self.get_num_less_equal(matrix, mid) < k:
+                start = mid 
+            else:
+                end = mid 
+        if self.get_num_less_equal(matrix, start) >= k:
+            return start
+        return end         
+            
+    def get_num_less_equal(self, matrix, mid):
+        m = len(matrix)
+        n = len(matrix[0])
+        i = 0 
+        j = n - 1
+        count = 0
+        while i < m and j >= 0:
+            if matrix[i][j] <= mid:
+                i += 1 
+                count += j + 1 
+            else:
+                j -= 1 
+        return count
