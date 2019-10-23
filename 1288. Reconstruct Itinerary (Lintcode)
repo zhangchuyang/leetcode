@@ -1,0 +1,49 @@
+# Given a list of airline tickets represented by pairs of departure and arrival airports [from, to], reconstruct the itinerary in order. All of the tickets belong to a man who departs from JFK. Thus, the itinerary must begin with JFK.
+
+# Example
+# Example 1:
+
+# Input: [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+# Output: ["JFK", "MUC", "LHR", "SFO", "SJC"].
+# Example 2:
+
+# Input: [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+# Output: ["JFK","ATL","JFK","SFO","ATL","SFO"].
+# Explanation: Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"]. But it is larger in lexical order
+# Notice
+# 1.If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string. For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+# 2.All airports are represented by three capital letters (IATA code).
+# 3.You may assume all tickets form at least one valid itinerary.
+
+class Solution:
+    """
+    @param tickets: 
+    @return: nothing
+    """
+    def findItinerary(self, tickets):
+        # Write your code here
+
+        res = []
+        d = {}
+        
+        for ticket in tickets:
+            d[ticket[0]] = d.get(ticket[0], []) + [ticket[1]]
+            
+        for i in d.keys():
+            d[i].sort()
+            
+        stack = ['JFK']
+        
+            
+        while stack:
+            print(stack, res)
+            next_stop = stack[-1]
+            if next_stop in d and len(d[next_stop]):
+                stack.append(d[next_stop].pop(0))
+            else:
+                res.append(stack.pop())
+
+
+        return res[::-1]
+            
+            
