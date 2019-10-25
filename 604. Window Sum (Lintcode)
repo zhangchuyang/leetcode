@@ -1,0 +1,34 @@
+# Given an array of n integers, and a moving window(size k), move the window at each iteration from the start of the array, find the sum of the element inside the window at each moving.
+
+# Example
+# Example 1
+
+# Input：array = [1,2,7,8,5], k = 3
+# Output：[10,17,20]
+# Explanation：
+# 1 + 2 + 7 = 10
+# 2 + 7 + 8 = 17
+# 7 + 8 + 5 = 20
+
+class Solution:
+    """
+    @param nums: a list of integers.
+    @param k: length of window.
+    @return: the sum of the element inside the window at each moving.
+    """
+    def winSum(self, nums, k):
+        # write your code here
+        res = []
+        if not nums or not k:   return []
+        if k > len(nums):   return [sum(nums)]
+        total = 0
+        for index in range(len(nums)):
+            if index < k:
+                total += nums[index]
+                continue
+            res.append(total)
+            total += (nums[index] - nums[index - k])
+        
+        res.append(total)
+            
+        return res
