@@ -1,0 +1,66 @@
+# Given a binary tree, find the subtree with maximum average. Return the root of the subtree.
+
+# Example
+# Example 1
+
+# Input：
+# {1,-5,11,1,2,4,-2}
+# Output：11
+# Explanation:
+# The tree is look like this:
+#      1
+#   /   \
+#  -5     11
+#  / \   /  \
+# 1   2 4    -2 
+# The average of subtree of 11 is 4.3333, is the maximun.
+# Example 2
+
+# Input：
+# {1,-5,11}
+# Output：11
+# Explanation:
+#      1
+#   /   \
+#  -5     11
+# The average of subtree of 1,-5,11 is 2.333,-5,11. So the subtree of 11 is the maximun.
+# Notice
+# LintCode will print the subtree which root is your return node.
+# It's guaranteed that there is only one subtree with maximum average.
+
+
+"""
+Definition of TreeNode:
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left, self.right = None, None
+"""
+
+class Solution:
+    """
+    @param root: the root of binary tree
+    @return: the root of the maximum average of subtree
+    """
+    def findSubtree2(self, root):
+        # write your code here
+        self.res = None
+        self.res_sum = float('-inf')
+        self.helper(root)
+        return self.res
+        
+        
+    def helper(self, root):
+        if not root:    return 0, 0
+        
+        left, left_size = self.helper(root.left)
+        right, right_size = self.helper(root.right)
+        
+        total = left + right + root.val
+        size = left_size + right_size + 1
+        
+        if not self.res or total / size > self.res_sum:
+            self.res = root
+            self.res_sum = total / size
+            
+        return total, size
