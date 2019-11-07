@@ -1,0 +1,135 @@
+# Design and implement a data structure for Least Frequently Used (LFU) cache. It should support the following operations: get and put.
+
+# get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+# put(key, value) - Set or insert the value if the key is not already present. When the cache reaches its capacity, it should invalidate the least frequently used item before inserting a new item. For the purpose of this problem, when there is a tie (i.e., two or more keys that have the same frequency), the least recently used key would be evicted.
+
+# Note that the number of times an item is used is the number of calls to the get and put functions for that item since it was inserted. This number is set to zero when the item is removed.
+
+ 
+
+# Follow up:
+# Could you do both operations in O(1) time complexity?
+
+ 
+
+# Example:
+
+# LFUCache cache = new LFUCache( 2 /* capacity */ );
+
+# cache.put(1, 1);
+# cache.put(2, 2);
+# cache.get(1);       // returns 1
+# cache.put(3, 3);    // evicts key 2
+# cache.get(2);       // returns -1 (not found)
+# cache.get(3);       // returns 3.
+# cache.put(4, 4);    // evicts key 1.
+# cache.get(1);       // returns -1 (not found)
+# cache.get(3);       // returns 3
+# cache.get(4);       // returns 4
+
+# Logically works, Error for large test cases.
+
+class Node:
+    def __init__(self, key, value):
+        self.key = key
+        self.val = value
+        self.freq = 1
+        self.prev = None
+        self.next = None
+        
+class DoubleLinkedList:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        
+    def appendHead(self, node):
+        if not self.head:
+            self.head = node
+            self.tail = node
+        else:
+            node.next = self.head
+            self.head = node
+            self.head.next.prev = self.head
+            self.head.prev = None
+        
+    def pop(self, node):
+        
+        if not node:    return
+        if node == self.head == self.tail:
+            self.head = None
+            self.tail = None
+            return node
+        if node == self.head:   
+            self.head = self.head.next
+            self.head.prev = None
+            return node
+        if node == self.tail:   
+            self.tail = self.tail.prev
+            self.tail.next = None
+            return node
+        prev, nxt = node.prev, node.next
+        prev.next = nxt
+        nxt.prev = prev
+        
+        return node    
+
+        
+class LFUCache:
+    import collections
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.size = 0
+        self.d = {}
+        self.freq = collections.defaultdict(DoubleLinkedList)
+        self.min_freq = 1
+        
+        
+    def get(self, key: int) -> int:
+        print('size', self.size, key)
+
+        if key not in self.d:   return -1
+        node = self.d[key]
+        print('get node freq', node.freq)
+        self.freq[node.freq].pop(node)
+        if node.freq == self.min_freq and not self.freq[self.min_freq].head and not self.freq[self.min_freq].tail:
+            self.min_freq += 1
+            print('update', self.min_freq)
+        node.freq += 1
+        # print(node.val, node.freq)
+        self.freq[node.freq].appendHead(node)
+        print('1', self.freq[1].__dict__)
+        return self.d[key].val
+        
+
+    def put(self, key: int, value: int) -> None:
+        print('size', self.size, key, value)
+        if self.capacity == 0:  return
+        if key not in self.d:
+            print ('key not in')
+            node = Node(key, value)
+            if self.size == self.capacity:
+                print('min_freq', self.min_freq)
+                print('1', self.freq[self.min_freq].__dict__)
+                node = self.freq[self.min_freq].pop(self.freq[self.min_freq].tail)
+                del self.d[node.key]
+
+                self.size -= 1
+            self.size += 1
+            self.d[key] = node
+            
+            self.freq[node.freq].appendHead(node)
+            self.min_freq = 1
+            # print('1', self.freq[1].__dict__)
+
+        else:
+            node = self.d[key]
+            node.val = value
+            self.freq[node.freq].pop(node)
+            node.freq += 1
+            self.freq[node.freq].appendHead(node)
+
+# Your LFUCache object will be instantiated and called as such:
+# obj = LFUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
