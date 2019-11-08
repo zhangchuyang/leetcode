@@ -1,0 +1,29 @@
+# Given a range [m, n] where 0 <= m <= n <= 2147483647, return the bitwise AND of all numbers in this range, inclusive.
+
+# For example, given the range [5, 7], you should return 4.
+
+# Example
+# Example1
+
+# Input: m=5, n=7
+# Output: 4
+# Example2
+
+# Input: m=14, n=15
+# Output: 14
+
+class Solution:
+    """
+    @param m: an Integer
+    @param n: an Integer
+    @return: the bitwise AND of all numbers in [m,n]
+    """
+    def rangeBitwiseAnd(self, m, n):
+        # Write your code here
+
+        res = n
+        while m <= n:
+            res = res & n
+            n -= 1
+            
+        return res
