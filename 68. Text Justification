@@ -93,3 +93,36 @@ class Solution(object):
         return res
         
         
+        
+  class Solution:
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        res = []
+        index = 0
+        
+        while index < len(words):
+            length = 0
+            curr = []
+            while index < len(words) and length + len(curr) + len(words[index]) <= maxWidth:
+                curr.append(words[index])
+                length += len(words[index])
+                index += 1
+            
+            if len(curr) == 1:
+                res.append(''.join(curr) + ' ' * (maxWidth - len(curr[0])))
+                continue
+            
+            if index == len(words):
+                res.append(' '.join(curr) + ' ' * (maxWidth - length - len(curr) + 1))
+                return res  
+
+            space = (maxWidth - length) // (len(curr) - 1)
+            more_space = maxWidth - (space * (len(curr) - 1)) - length
+            if more_space != 0:
+                res.append((' ' * (space + 1)).join(curr[:more_space]) + ' ' * (space + 1) + (' ' * space).join(curr[more_space:]))
+            else:
+                res.append((' ' * space).join(curr))
+
+        return res
+            
+        
+        
