@@ -1,0 +1,49 @@
+# Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+# If the fractional part is repeating, enclose the repeating part in parentheses.
+
+# Example
+# Example1
+
+# Input: numerator = 1, denominator = 2
+# Output: "0.5"
+# Example2
+
+# Input: numerator = 2, denominator = 3
+# Output: "0.(6)"
+
+class Solution:
+    """
+    @param numerator: a integer
+    @param denominator: a integer
+    @return: return a string
+    """
+    def fractionToDecimal(self, numerator, denominator):
+        # write your code here
+
+        res = ''
+        if numerator % denominator == 0:    return str(numerator // denominator)
+        sign = '-' if numerator / denominator < 0 else ''
+        
+        numerator, denominator = abs(numerator), abs(denominator)
+        res += str(numerator // denominator) + '.'
+        numerator %= denominator
+        numerator *= 10
+        d = {}
+        index = len(res)
+        while numerator:
+            if numerator not in d:  
+                d[numerator] = index
+            else:
+                return sign + res[:d[numerator]] + '(' + res[d[numerator]:] + ')'
+            res += str(numerator // denominator)
+            numerator %= denominator
+            numerator *= 10
+            index += 1
+            
+        return sign + res
+            
+            
+            
+            
+        
