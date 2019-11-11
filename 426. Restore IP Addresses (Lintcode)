@@ -1,0 +1,37 @@
+
+# Given a string containing only digits, restore it by returning all possible valid IP address combinations.
+
+# (Your task is to add three dots to this string to make it a valid IP address. Return all possible IP address.)
+
+# Example
+# Example 1:
+
+# Input: "25525511135"
+# Output: ["255.255.11.135", "255.255.111.35"]
+# Explanation: ["255.255.111.35", "255.255.11.135"] will be accepted as well.
+# Example 2:
+
+# Input: "1116512311"
+# Output: ["11.165.123.11","111.65.123.11"]
+# Notice
+# You can return all valid IP address in any order.
+class Solution:
+    """
+    @param s: the IP string
+    @return: All possible valid IP addresses
+    """
+    def restoreIpAddresses(self, s):
+        # write your code here
+
+        ans=[]
+        self.dfs(s,[],ans)
+        return ans
+    def dfs(self,s,path,ans):
+        if not s and len(path)==4:
+            ans.append('.'.join(path))
+        n=min(4,len(s)+1)
+        for i in range(1,n):
+            if int(s[:i])<=255:
+                if i>1 and s[0]=='0' or len(path)==5:
+                    break
+                self.dfs(s[i:],path+[s[:i]],ans)
