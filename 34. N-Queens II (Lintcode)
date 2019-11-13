@@ -1,0 +1,58 @@
+# Follow up for N-Queens problem.
+
+# Now, instead outputting board configurations, return the total number of distinct solutions.
+
+# Example
+# Example 1:
+
+# Input: n=1
+# Output: 1
+# Explanation:
+# 1:
+# 1
+# Example 2:
+
+# Input: n=4
+# Output: 2
+# Explanation:
+# 1:
+# 0 0 1 0
+# 1 0 0 0
+# 0 0 0 1
+# 0 1 0 0
+# 2:
+# 0 1 0 0 
+# 0 0 0 1
+# 1 0 0 0
+# 0 0 1 0
+
+class Solution:
+    """
+    @param n: The number of queens.
+    @return: The total number of distinct solutions.
+    """
+    def totalNQueens(self, n):
+        # write your code here
+        
+        self.res = 0
+        
+        self.dfs(n, [])
+        
+        return self.res
+        
+    def dfs(self, n, path):
+        if len(path) == n:
+            self.res += 1
+            return
+        
+        for i in range(n):
+            if not self.isValid(i, path):   continue
+            self.dfs(n, path + [i])
+            
+    def isValid(self, index, path):
+        if index in path:   return False
+        for i in range(len(path)):
+            if abs(path[i] - index) == abs(len(path) - i):
+                return False
+                
+        return True
