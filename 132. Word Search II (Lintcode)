@@ -1,0 +1,56 @@
+# Given a matrix of lower alphabets and a dictionary. Find all words in the dictionary that can be found in the matrix. A word can start from any position in the matrix and go left/right/up/down to the adjacent position. One character only be used once in one word. No same word in dictionary
+
+# Example
+# Example 1:
+
+# Input：["doaf","agai","dcan"]，["dog","dad","dgdg","can","again"]
+# Output：["again","can","dad","dog"]
+# Explanation：
+#   d o a f
+#   a g a i
+#   d c a n
+# search in Matrix，so return ["again","can","dad","dog"].
+# Example 2:
+
+# Input：["a"]，["b"]
+# Output：[]
+# Explanation：
+#  a
+# search in Matrix，return [].
+# Challenge
+# Using trie to implement your algorithm.
+
+class Solution:
+    """
+    @param board: A list of lists of character
+    @param words: A list of string
+    @return: A list of string
+    """
+    def wordSearchII(self, board, words):
+        # write your code here
+        if not board or not board[0] or not words:  return []
+        prefix_set = set()
+        word_set = set(words)
+        for word in words:
+            for i in range(1, len(word) + 1):
+                prefix_set.add(word[:i])
+        
+        res = []
+        
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                self.dfs(res, board, i, j, prefix_set, word_set, [(i, j)], board[i][j])
+                
+        return list(set(res))
+        
+    def dfs(self, res, board, x, y, prefix_set, word_set, visited, path):
+        if path not in prefix_set:  return
+        if path in word_set:        res.append(path)
+            
+        for dx, dy in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+            if 0 <= x + dx < len(board) and 0 <= y + dy < len(board[0]) and (x + dx, y + dy) not in visited:
+                self.dfs(res, board, x + dx, y + dy, prefix_set, word_set, visited + [(x + dx, y + dy)], path + board[x + dx][y + dy])
+                
+        return
+                
+        
