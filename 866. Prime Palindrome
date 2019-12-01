@@ -1,0 +1,60 @@
+# Find the smallest prime palindrome greater than or equal to N.
+
+# Recall that a number is prime if it's only divisors are 1 and itself, and it is greater than 1. 
+
+# For example, 2,3,5,7,11 and 13 are primes.
+
+# Recall that a number is a palindrome if it reads the same from left to right as it does from right to left. 
+
+# For example, 12321 is a palindrome.
+
+ 
+
+# Example 1:
+
+# Input: 6
+# Output: 7
+# Example 2:
+
+# Input: 8
+# Output: 11
+# Example 3:
+
+# Input: 13
+# Output: 101
+
+class Solution(object):
+    def primePalindrome(self, N):
+        """
+        :type N: int
+        :rtype: int
+        """
+        if N == 1:  return 2
+        if N <= 3:  return N
+        if N <= 5:  return 5
+        if N <= 7:  return 7
+        if N <= 11: return 11
+        size = len(str(N))
+        while True:
+            for x in self.palindromes(size):
+                if x >= N and self.isPrime(x):
+                    return x
+            size += 1
+            
+            
+    def palindromes(self, size):
+        if size % 2 == 0:
+            for i in range(10 ** (size // 2 - 1), 10 ** (size // 2)):
+                yield int(str(i) + str(i)[::-1])
+        else:
+            for i in range(10 ** (size // 2 - 1), 10 ** (size // 2)):
+                for j in range(10):
+                    yield int(str(i) + str(j) + str(i)[::-1])
+
+        
+    def isPrime(self, x):
+        for i in range(2, int(x ** 0.5) + 1):
+            if x % i == 0:
+                return False
+            
+        return True
